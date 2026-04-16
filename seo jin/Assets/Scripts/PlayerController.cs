@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 public class PlayerController : MonoBehaviour
 {
     public float moveSeed = 5f;
@@ -10,6 +11,8 @@ public class PlayerController : MonoBehaviour
     private Rigidbody2D rb;
     private bool isGrounded;
     private float moveInput;
+    
+    private bool isGiant = false;
 
     private void Awake()
     {
@@ -43,4 +46,41 @@ public class PlayerController : MonoBehaviour
         
     }
 
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Respawn"))
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
+        if (collision.CompareTag("Finish"))
+        {
+            collision.GetComponent<LevelObject>().MoveToNextLevel();
+        }
+        if (collision.CompareTag("Enemy"))
+        {
+            if (isGiant)
+                Destroy(collision.gameObject);
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+
+            if (collision.CompareTag("Item"))
+            {
+                isGiant = true;
+                Destroy(collision.gameObject);
+            }
+        }
+        
+    }
+    void Uodate()
+    {
+        rb.linearVelocity = new Vector2(moveInput * moveSeed, rb. linearVelocity.y);
+
+        if (moveInput < 0f)
+            transform.localScale = new Vector3(1, 1, 1);
+        else if (moveInput > 0)
+            transform.localScale = new Vector3(-1, 1, 1);
+
+        isGrounded = Physics2D.OverlapCircle(groundCheck.position, 2f, groundLayer);
+    }
+
+  
 }
