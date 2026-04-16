@@ -65,6 +65,7 @@ public class PlayerController : MonoBehaviour
             if (collision.CompareTag("Item"))
             {
                 isGiant = true;
+                
                 Destroy(collision.gameObject);
             }
         }
