@@ -14,9 +14,12 @@ public class PlayerController : MonoBehaviour
     
     private bool isGiant = false;
 
+    float score;
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+        score = 0f;
     }
 
     private void Update()
@@ -54,6 +57,8 @@ public class PlayerController : MonoBehaviour
         }
         if (collision.CompareTag("Finish"))
         {
+           
+
             collision.GetComponent<LevelObject>().MoveToNextLevel();
         }
         if (collision.CompareTag("Enemy"))
